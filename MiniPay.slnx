@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="MiniPay.API.Tests/MiniPay.Api.Tests.csproj" />
+  <Project Path="MiniPay.API/MiniPay.API.csproj" />
+</Solution>
