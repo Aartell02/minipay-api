@@ -1,5 +1,5 @@
-﻿using MiniPay.API.Application.Enums;
-using MiniPay.API.Domain.Aggregates;
+﻿using MiniPay.API.Domain.Aggregates;
+using MiniPay.API.Domain.Transactions;
 
 namespace MiniPay.API.Tests
 {

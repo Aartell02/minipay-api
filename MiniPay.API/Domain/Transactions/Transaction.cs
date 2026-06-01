@@ -1,5 +1,4 @@
-﻿using MiniPay.API.Application.Enums;
-using MiniPay.API.Domain.Events;
+﻿using MiniPay.API.Domain.Transactions;
 
 namespace MiniPay.API.Domain.Aggregates
 {
@@ -16,7 +15,7 @@ namespace MiniPay.API.Domain.Aggregates
         public static Transaction Initiate(decimal amount, string currency)
         {
             var transaction = new Transaction();
-            transaction.Apply(new TransactionInitiated(Guid.NewGuid(), DateTimeOffset.UtcNow, amount, currency));
+            transaction.Apply(new TransactionInitiated(amount, currency));
             return transaction;
         }
 
@@ -24,7 +23,7 @@ namespace MiniPay.API.Domain.Aggregates
         {
             if (Status != TransactionStatus.Initiated)
                 throw new InvalidOperationException("Only initiated transactions can be authorized.");
-            Apply(new PaymentAuthorized(Id, DateTimeOffset.UtcNow));
+            Apply(new PaymentAuthorized());
         }
 
         private void Apply(TransactionEvent evt)
@@ -48,6 +47,21 @@ namespace MiniPay.API.Domain.Aggregates
                     break;
             }
             _uncommittedEvents.Add(evt);
+        }
+
+        public static Transaction Replay(IEnumerable<TransactionEvent> events)
+        {
+            var transaction = new Transaction();
+            foreach (var e in events)
+                transaction.Apply(e);
+            return transaction;
+        }
+
+        public void Settle()
+        {
+            if (Status != TransactionStatus.Authorized)
+                throw new InvalidOperationException("Tylko authorized można rozliczyć.");
+            Apply(new FundsSettled());
         }
     }
 

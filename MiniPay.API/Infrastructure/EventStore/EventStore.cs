@@ -1,0 +1,43 @@
+﻿using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+using MiniPay.API.Domain.Transactions;
+
+namespace MiniPay.API.Infrastructure.EventStore
+{
+    public class EventStore(EventStoreDbContext dbContext) : IEventStore
+    {
+        private readonly EventStoreDbContext _dbContext = dbContext;
+
+        public async Task SaveAsync(IEnumerable<TransactionEvent> events)
+        {
+            var eventEntities = events.Select(e => new EventEntity
+            {
+                TransactionId = e.TransactionId,
+                EventType = e.GetType().Name,
+                Payload = JsonSerializer.Serialize(e),
+                OccuredAt = DateTimeOffset.UtcNow
+            });
+            await _dbContext.Events.AddRangeAsync(eventEntities);
+            await _dbContext.SaveChangesAsync();
+        }
+        public async Task<IEnumerable<TransactionEvent>> LoadAsync(Guid transactionId)
+        {
+            var eventEntities = await _dbContext.Events
+                .Where(e => e.TransactionId == transactionId)
+                .OrderBy(e => e.OccuredAt)
+                .ToListAsync();
+
+            return eventEntities.Select(Deserialize);
+        }
+
+        private static TransactionEvent Deserialize(EventEntity entity) => entity.EventType switch
+            {
+                nameof(TransactionInitiated) => JsonSerializer.Deserialize<TransactionInitiated>(entity.Payload)!,
+                nameof(PaymentAuthorized) => JsonSerializer.Deserialize<PaymentAuthorized>(entity.Payload)!,
+                nameof(FundsSettled) => JsonSerializer.Deserialize<FundsSettled>(entity.Payload)!,
+                nameof(RefundRequested) => JsonSerializer.Deserialize<RefundRequested>(entity.Payload)!,
+                _ => throw new InvalidOperationException($"Unknown event type: {entity.EventType}")
+            };
+        
+    }
+}

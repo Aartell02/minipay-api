@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using MiniPay.API.Infrastructure;
+using MiniPay.API.Infrastructure.EventStore;
 
 namespace MiniPay.API
 {
@@ -10,6 +13,9 @@ namespace MiniPay.API
             // Add services to the container.
 
             builder.Services.AddControllers();
+            builder.Services.AddDbContext<EventStoreDbContext>(options => 
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddScoped<IEventStore, EventStore>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
