@@ -31,19 +31,19 @@ namespace MiniPay.Infrastructure.EventStore
 
         private static string Serialize(TransactionEvent @event) => @event switch
         {
-            TransactionInitiated e => JsonSerializer.Serialize(e),
-            PaymentAuthorized e => JsonSerializer.Serialize(e),
-            FundsSettled e => JsonSerializer.Serialize(e),
-            RefundRequested e => JsonSerializer.Serialize(e),
+            TransactionInitiatedEvent e => JsonSerializer.Serialize(e),
+            TransactionAuthorizedEvent e => JsonSerializer.Serialize(e),
+            TransactionSettledEvent e => JsonSerializer.Serialize(e),
+            TransactionRefundRequestedEvent e => JsonSerializer.Serialize(e),
             _ => throw new InvalidOperationException($"Unknown event type: {@event.GetType().Name}")
         };
 
         private static TransactionEvent Deserialize(EventEntity entity) => entity.EventType switch
             {
-                nameof(TransactionInitiated) => JsonSerializer.Deserialize<TransactionInitiated>(entity.Payload)!,
-                nameof(PaymentAuthorized) => JsonSerializer.Deserialize<PaymentAuthorized>(entity.Payload)!,
-                nameof(FundsSettled) => JsonSerializer.Deserialize<FundsSettled>(entity.Payload)!,
-                nameof(RefundRequested) => JsonSerializer.Deserialize<RefundRequested>(entity.Payload)!,
+                nameof(TransactionInitiatedEvent) => JsonSerializer.Deserialize<TransactionInitiatedEvent>(entity.Payload)!,
+                nameof(TransactionAuthorizedEvent) => JsonSerializer.Deserialize<TransactionAuthorizedEvent>(entity.Payload)!,
+                nameof(TransactionSettledEvent) => JsonSerializer.Deserialize<TransactionSettledEvent>(entity.Payload)!,
+                nameof(TransactionRefundRequestedEvent) => JsonSerializer.Deserialize<TransactionRefundRequestedEvent>(entity.Payload)!,
                 _ => throw new InvalidOperationException($"Unknown event type: {entity.EventType}")
             };
         

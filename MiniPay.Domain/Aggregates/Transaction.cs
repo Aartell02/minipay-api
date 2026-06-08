@@ -16,7 +16,7 @@ namespace MiniPay.Domain.Aggregates
         public static Transaction Initiate(decimal amount, string currency)
         {
             var transaction = new Transaction();
-            var transactionEvent = new TransactionInitiated(Guid.NewGuid(), amount, currency);
+            var transactionEvent = new TransactionInitiatedEvent(Guid.NewGuid(), amount, currency);
             transaction.Apply(transactionEvent);
             transaction._uncommittedEvents.Add(transactionEvent);
             return transaction;
@@ -34,19 +34,19 @@ namespace MiniPay.Domain.Aggregates
         {
             switch(evt)
             {
-                case TransactionInitiated e:
+                case TransactionInitiatedEvent e:
                     Id = e.TransactionId;
                     Amount = e.Amount;
                     Currency = e.Currency;
                     Status = TransactionStatus.Initiated;
                     break;
-                case PaymentAuthorized e:
+                case TransactionAuthorizedEvent e:
                     Status = TransactionStatus.Authorized;
                     break;
-                case FundsSettled e:
+                case TransactionSettledEvent e:
                     Status = TransactionStatus.Settled;
                     break;
-                case RefundRequested e:
+                case TransactionRefundRequestedEvent e:
                     Status = TransactionStatus.Refunded;
                     break;
             }
@@ -57,7 +57,7 @@ namespace MiniPay.Domain.Aggregates
             if (Status != TransactionStatus.Initiated)
                 throw new InvalidOperationException("Only initiated transactions can be authorized.");
 
-            var paymentAuthorizedEvent = new PaymentAuthorized(Id);
+            var paymentAuthorizedEvent = new TransactionAuthorizedEvent(Id);
             Apply(paymentAuthorizedEvent);
             _uncommittedEvents.Add(paymentAuthorizedEvent);
         }
@@ -68,7 +68,7 @@ namespace MiniPay.Domain.Aggregates
             if (Status != TransactionStatus.Authorized)
                 throw new InvalidOperationException("Only authorized transactions can be settled.");
 
-            var fundsSettledEvent = new FundsSettled(Id);
+            var fundsSettledEvent = new TransactionSettledEvent(Id);
             Apply(fundsSettledEvent);
             _uncommittedEvents.Add(fundsSettledEvent);
         }

@@ -13,7 +13,7 @@ namespace MiniPay.API.Controllers
     {
 
         [HttpPost("initiate")]
-        public async Task<IActionResult> Initiate([FromBody] InitiatePaymentCommand request)
+        public async Task<IActionResult> Initiate([FromBody] TransactionInitiateCommand request)
         {
             var response = await mediator.Send(request);
 
@@ -21,7 +21,7 @@ namespace MiniPay.API.Controllers
         }
 
         [HttpPost("authorize")]
-        public async Task<IActionResult> Authorize([FromBody] AuthorizePaymentCommand request)
+        public async Task<IActionResult> Authorize([FromBody] TransactionAuthorizeCommand request)
         {
             var response = await mediator.Send(request);
 
@@ -29,7 +29,7 @@ namespace MiniPay.API.Controllers
         }
 
         [HttpPost("settle")]
-        public async Task<IActionResult> Settle([FromBody]SettlePaymentCommand request)
+        public async Task<IActionResult> Settle([FromBody]TransactionSettleCommand request)
         {
             var response = await mediator.Send(request);
 
@@ -39,7 +39,7 @@ namespace MiniPay.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var response = await mediator.Send(new GetPaymentByIdCommand(id));
+            var response = await mediator.Send(new TransactionGetByIdCommand(id));
 
             return Ok(new { response });
         }
