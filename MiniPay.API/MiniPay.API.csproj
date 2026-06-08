@@ -14,17 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.27" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.8">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Commands\" />
-    <Folder Include="Application\Handlers\" />
+    <ProjectReference Include="..\MiniPay.Application\MiniPay.Application.csproj" />
+    <ProjectReference Include="..\MiniPay.Infrastructure\MiniPay.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

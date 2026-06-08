@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace MiniPay.API.Infrastructure
+namespace MiniPay.Infrastructure.EventStore
 {
     public class EventStoreDbContext(DbContextOptions<EventStoreDbContext> options) : DbContext(options)
     {

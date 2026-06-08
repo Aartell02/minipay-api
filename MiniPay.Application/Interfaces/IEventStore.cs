@@ -1,6 +1,6 @@
-﻿using MiniPay.API.Domain.Transactions;
+﻿using MiniPay.Domain.Events;
 
-namespace MiniPay.API.Infrastructure.EventStore
+namespace MiniPay.Application.Interfaces
 {
     public interface IEventStore
     {

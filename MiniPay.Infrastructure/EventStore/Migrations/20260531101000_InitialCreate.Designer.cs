@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MiniPay.API.Infrastructure;
+using MiniPay.Infrastructure.EventStore;
 
 
 #nullable disable

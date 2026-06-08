@@ -1,4 +1,20 @@
 <Solution>
-  <Project Path="MiniPay.API.Tests/MiniPay.Api.Tests.csproj" />
-  <Project Path="MiniPay.API/MiniPay.API.csproj" />
+  <Project Path="MiniPay.API.Tests/MiniPay.Tests.csproj">
+    <BuildDependency Project="MiniPay.Application/MiniPay.Application.csproj" />
+    <BuildDependency Project="MiniPay.Domain/MiniPay.Domain.csproj" />
+    <BuildDependency Project="MiniPay.Infrastructure/MiniPay.Infrastructure.csproj" />
+  </Project>
+  <Project Path="MiniPay.API/MiniPay.API.csproj">
+    <BuildDependency Project="MiniPay.Application/MiniPay.Application.csproj" />
+    <BuildDependency Project="MiniPay.Domain/MiniPay.Domain.csproj" />
+    <BuildDependency Project="MiniPay.Infrastructure/MiniPay.Infrastructure.csproj" />
+  </Project>
+  <Project Path="MiniPay.Application/MiniPay.Application.csproj">
+    <BuildDependency Project="MiniPay.Domain/MiniPay.Domain.csproj" />
+  </Project>
+  <Project Path="MiniPay.Domain/MiniPay.Domain.csproj" />
+  <Project Path="MiniPay.Infrastructure/MiniPay.Infrastructure.csproj">
+    <BuildDependency Project="MiniPay.Application/MiniPay.Application.csproj" />
+    <BuildDependency Project="MiniPay.Domain/MiniPay.Domain.csproj" />
+  </Project>
 </Solution>

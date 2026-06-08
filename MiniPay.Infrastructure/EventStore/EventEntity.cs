@@ -1,4 +1,4 @@
-﻿namespace MiniPay.API.Infrastructure
+﻿namespace MiniPay.Infrastructure.EventStore
 {
     public class EventEntity
     {

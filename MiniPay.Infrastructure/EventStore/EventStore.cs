@@ -1,13 +1,12 @@
 ﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using MiniPay.API.Domain.Transactions;
+using MiniPay.Application.Interfaces;
+using MiniPay.Domain.Events;
 
-namespace MiniPay.API.Infrastructure.EventStore
+namespace MiniPay.Infrastructure.EventStore
 {
     public class EventStore(EventStoreDbContext dbContext) : IEventStore
     {
-        private readonly EventStoreDbContext _dbContext = dbContext;
-
         public async Task SaveAsync(IEnumerable<TransactionEvent> events)
         {
             var eventEntities = events.Select(e => new EventEntity
@@ -17,12 +16,12 @@ namespace MiniPay.API.Infrastructure.EventStore
                 Payload = JsonSerializer.Serialize(e),
                 OccuredAt = DateTimeOffset.UtcNow
             });
-            await _dbContext.Events.AddRangeAsync(eventEntities);
-            await _dbContext.SaveChangesAsync();
+            await dbContext.Events.AddRangeAsync(eventEntities);
+            await dbContext.SaveChangesAsync();
         }
         public async Task<IEnumerable<TransactionEvent>> LoadAsync(Guid transactionId)
         {
-            var eventEntities = await _dbContext.Events
+            var eventEntities = await dbContext.Events
                 .Where(e => e.TransactionId == transactionId)
                 .OrderBy(e => e.OccuredAt)
                 .ToListAsync();

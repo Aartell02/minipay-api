@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MiniPay.API\MiniPay.API.csproj" />
+    <ProjectReference Include="..\MiniPay.Domain\MiniPay.Domain.csproj" />
   </ItemGroup>
 
 </Project>

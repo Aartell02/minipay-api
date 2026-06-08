@@ -1,4 +1,4 @@
-﻿namespace MiniPay.API.Domain.Transactions
+﻿namespace MiniPay.Domain.Enums
 {
     public enum TransactionType
     {
