@@ -13,53 +13,35 @@ namespace MiniPay.API.Controllers
     {
 
         [HttpPost("initiate")]
-        public async Task<IActionResult> Initiate(InitiatePaymentCommand request)
+        public async Task<IActionResult> Initiate([FromBody] InitiatePaymentCommand request)
         {
-            var id = await mediator.Send(request);
+            var response = await mediator.Send(request);
 
-            return Ok(new { id });
+            return Ok(new { response });
         }
 
         [HttpPost("authorize")]
-        public async Task<IActionResult> Authorize(AuthorizePaymentCommand request)
+        public async Task<IActionResult> Authorize([FromBody] AuthorizePaymentCommand request)
         {
-            var id = await mediator.Send(request);
+            var response = await mediator.Send(request);
 
-            return Ok(new { id });
+            return Ok(new { response });
         }
 
         [HttpPost("settle")]
-        public async Task<IActionResult> Settle(SettlePaymentCommand request)
+        public async Task<IActionResult> Settle([FromBody]SettlePaymentCommand request)
         {
-            var id = await mediator.Send(request);
+            var response = await mediator.Send(request);
 
-            return Ok(new { id });
+            return Ok(new { response });
         }
-        /*
-        // GET /api/transactions/{id}
+        
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var events = await _eventStore.LoadAsync(id);
-            if (!events.Any())
-                return NotFound();
+            var response = await mediator.Send(new GetPaymentByIdCommand(id));
 
-            var transaction = Transaction.Rewind(events);
-
-            return Ok(new
-            {
-                transaction.Id,
-                transaction.Amount,
-                transaction.Currency,
-                transaction.Status,
-                History = events.Select(e => new
-                {
-                    Type = e.GetType().Name,
-                    e.OccurredAt
-                })
-            });
-
+            return Ok(new { response });
         }
-        */
     }
 }

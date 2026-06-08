@@ -13,7 +13,7 @@ namespace MiniPay.Infrastructure.EventStore
             {
                 TransactionId = e.TransactionId,
                 EventType = e.GetType().Name,
-                Payload = JsonSerializer.Serialize(e),
+                Payload = Serialize(e),
                 OccuredAt = DateTimeOffset.UtcNow
             });
             await dbContext.Events.AddRangeAsync(eventEntities);
@@ -28,6 +28,15 @@ namespace MiniPay.Infrastructure.EventStore
 
             return eventEntities.Select(Deserialize);
         }
+
+        private static string Serialize(TransactionEvent @event) => @event switch
+        {
+            TransactionInitiated e => JsonSerializer.Serialize(e),
+            PaymentAuthorized e => JsonSerializer.Serialize(e),
+            FundsSettled e => JsonSerializer.Serialize(e),
+            RefundRequested e => JsonSerializer.Serialize(e),
+            _ => throw new InvalidOperationException($"Unknown event type: {@event.GetType().Name}")
+        };
 
         private static TransactionEvent Deserialize(EventEntity entity) => entity.EventType switch
             {
