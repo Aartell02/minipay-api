@@ -1,8 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using MiniPay.Application.Commands;
-using MiniPay.Application.Handlers;
-using MiniPay.Application.Interfaces;
-using MiniPay.Domain.Aggregates;
 using MediatR;
 
 namespace MiniPay.API.Controllers

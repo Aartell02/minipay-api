@@ -1,8 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using MiniPay.Application;
-using MiniPay.Application.Interfaces;
 using MiniPay.Infrastructure;
-using MiniPay.Infrastructure.EventStore;
     
 namespace MiniPay.API
 {
@@ -13,16 +10,14 @@ namespace MiniPay.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
             builder.Services
                 .AddApplication()
                 .AddInfrastructure(builder.Configuration);
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
-
 
             var app = builder.Build();
 
@@ -36,7 +31,6 @@ namespace MiniPay.API
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
