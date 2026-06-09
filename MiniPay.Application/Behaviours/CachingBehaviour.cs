@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using MediatR;
+﻿using MediatR;
 using MiniPay.Application.Interfaces;
 
 namespace MiniPay.Application.Behaviours
