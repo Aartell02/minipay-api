@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MiniPay.Application.Interfaces
+﻿namespace MiniPay.Application.Interfaces
 {
     internal interface ICacheInvalidation
     {
+       string CacheKey { get; }
     }
 }

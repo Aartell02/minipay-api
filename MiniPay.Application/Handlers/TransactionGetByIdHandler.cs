@@ -1,14 +1,14 @@
 ﻿using MediatR;
-using MiniPay.Application.Commands;
 using MiniPay.Application.DTOs;
 using MiniPay.Application.Interfaces;
+using MiniPay.Application.Queries;
 using MiniPay.Domain.Aggregates;
 
 namespace MiniPay.Application.Handlers
 {
-    public class TransactionGetByIdHandler(IEventStore eventStore) : IRequestHandler<TransactionGetByIdCommand, TransactionDto>
+    public class TransactionGetByIdHandler(IEventStore eventStore) : IRequestHandler<TransactionGetByIdQuery, TransactionDto>
     {
-        public async Task<TransactionDto> Handle(TransactionGetByIdCommand request, CancellationToken cancellationToken)
+        public async Task<TransactionDto> Handle(TransactionGetByIdQuery request, CancellationToken cancellationToken)
         {
             var events = await eventStore.LoadAsync(request.Id);
             if (!events.Any())

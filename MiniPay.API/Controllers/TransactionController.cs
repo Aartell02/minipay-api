@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MiniPay.Application.Commands;
 using MediatR;
+using MiniPay.Application.Queries;
 
 namespace MiniPay.API.Controllers
 {
@@ -36,7 +37,7 @@ namespace MiniPay.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var response = await mediator.Send(new TransactionGetByIdCommand(id));
+            var response = await mediator.Send(new TransactionGetByIdQuery(id));
 
             return Ok(new { response });
         }
