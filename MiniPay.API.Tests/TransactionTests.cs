@@ -33,5 +33,23 @@ namespace MiniPay.Tests
 
             Assert.Throws<InvalidOperationException>(() => transaction.Authorize());
         }
+
+        [Fact]
+        public void Settle_WhenNotAuthorized_ShouldThrow()
+        {
+            var transaction = Transaction.Initiate(100m, "PLN");
+            Assert.Throws<InvalidOperationException>(() => transaction.Settle());
+        }
+
+        [Fact]
+        public void Rewind_UncommitedEvents_ShouldBeEmpty()
+        {
+            var transaction = Transaction.Initiate(100m, "PLN");
+            transaction.Authorize();
+            var events = transaction.UncommittedEvents.ToList();
+
+            var transactionRewind = Transaction.Rewind(events);
+            Assert.Empty(transactionRewind.UncommittedEvents);
+        }
     }
 }

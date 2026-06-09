@@ -1,6 +1,6 @@
 ﻿namespace MiniPay.Application.Interfaces
 {
-    internal interface ICacheInvalidation
+    public interface ICacheInvalidation
     {
        string CacheKey { get; }
     }

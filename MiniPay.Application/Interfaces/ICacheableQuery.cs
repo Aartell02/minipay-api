@@ -1,6 +1,6 @@
 ﻿namespace MiniPay.Application.Interfaces
 {
-    internal interface ICacheableQuery
+    public interface ICacheableQuery
     {
         bool BypassCache { get; }
         string CacheKey { get; }

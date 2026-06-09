@@ -23,7 +23,7 @@ namespace MiniPay.Infrastructure.Events
         {
             var eventEntities = await dbContext.Events
                 .Where(e => e.TransactionId == transactionId)
-                .OrderBy(e => e.OccuredAt)
+                .OrderBy(e => e.Id)
                 .ToListAsync();
 
             return eventEntities.Select(Deserialize);

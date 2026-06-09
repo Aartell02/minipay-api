@@ -10,6 +10,9 @@ namespace MiniPay.Application.Handlers
     {
         public async Task<TransactionDto> Handle(TransactionInitiateCommand request, CancellationToken cancellationToken)
         {
+            if (request.Amount == 0) throw new ArgumentException("Amount cannot be zero.");
+            if (string.IsNullOrWhiteSpace(request.Currency)) throw new ArgumentException("Currency is required.");
+
             var transaction = Transaction.Initiate(request.Amount, request.Currency);
             await eventStore.SaveAsync(transaction.UncommittedEvents);
             return new TransactionDto(transaction.Id, transaction.Amount, transaction.Currency, transaction.Status.ToString(), []);
