@@ -1,6 +1,6 @@
 # MiniPay API
 
-Payment processing API built with **Event Sourcing**, **CQRS** and **Clean Architecture**.
+Payment processing API built with **Domain-Driven Design**, **Event Sourcing**, **CQRS** and **Clean Architecture**.
 
 ---
 
@@ -13,6 +13,7 @@ Payment processing API built with **Event Sourcing**, **CQRS** and **Clean Archi
 | Entity Framework Core | Event Store (SQL Server) |
 | Redis | Distributed Cache |
 | xUnit | Unit Tests |
+| DDD | Aggregates, Domain Events, Value Objects |
 
 ---
 
@@ -23,6 +24,7 @@ MiniPay.Domain          → Aggregates, Events, Enums
 MiniPay.Application     → Commands, Queries, Handlers, Behaviours, Interfaces
 MiniPay.Infrastructure  → EventStore, CacheService, EF Core
 MiniPay.API             → Controllers, Program.cs
+MiniPay.API.Tests       → Unit Tests (xUnit)
 ```
 
 ### How it works
@@ -72,8 +74,10 @@ dotnet run --project MiniPay.API
 **4. Open Swagger**
 
 ```
-https://localhost:7149/swagger
+https://localhost:{port}/swagger
 ```
+
+> Port is defined in `MiniPay.API/Properties/launchSettings.json`
 
 ---
 
@@ -82,8 +86,8 @@ https://localhost:7149/swagger
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `POST` | `/api/transactions/initiate` | Create a new transaction |
-| `POST` | `/api/transactions/{id}/authorize` | Authorize a transaction |
-| `POST` | `/api/transactions/{id}/settle` | Settle an authorized transaction |
+| `POST` | `/api/transactions/authorize` | Authorize a transaction |
+| `POST` | `/api/transactions/settle` | Settle an authorized transaction |
 | `GET` | `/api/transactions/{id}` | Get transaction by ID |
 
 ### Example
