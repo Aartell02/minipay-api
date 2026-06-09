@@ -2,7 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MiniPay.Application.Interfaces;
-using MiniPay.Infrastructure.EventStore;
+using MiniPay.Infrastructure.Cache;
+using MiniPay.Infrastructure.Events;
 
 namespace MiniPay.Infrastructure
 {
@@ -11,9 +12,17 @@ namespace MiniPay.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<EventStoreDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(configuration.GetConnectionString("Database")));
 
-            services.AddScoped<IEventStore, EventStore.EventStore>();
+            // 1. Register the Distributed Cache Service
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration["Redis:Configuration"];
+                options.InstanceName = configuration["Redis:InstanceName"];
+            });
+            
+            services.AddScoped<IEventStore, EventStore>();
+            services.AddScoped<ICacheService, CacheService>();
             return services;
         }
     }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MiniPay.Application.Interfaces;
 using MiniPay.Domain.Events;
 
-namespace MiniPay.Infrastructure.EventStore
+namespace MiniPay.Infrastructure.Events
 {
     public class EventStore(EventStoreDbContext dbContext) : IEventStore
     {

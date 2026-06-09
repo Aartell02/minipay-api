@@ -3,9 +3,8 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MiniPay.Infrastructure.EventStore;
+using MiniPay.Infrastructure.Events;
 
 
 #nullable disable
@@ -13,11 +12,9 @@ using MiniPay.Infrastructure.EventStore;
 namespace MiniPay.API.Migrations
 {
     [DbContext(typeof(EventStoreDbContext))]
-    [Migration("20260531101000_InitialCreate")]
-    partial class InitialCreate
+    partial class EventStoreDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
