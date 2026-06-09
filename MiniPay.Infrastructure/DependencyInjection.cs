@@ -14,11 +14,9 @@ namespace MiniPay.Infrastructure
             services.AddDbContext<EventStoreDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("Database")));
 
-            // 1. Register the Distributed Cache Service
             services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = configuration["Redis:Configuration"];
-                options.InstanceName = configuration["Redis:InstanceName"];
+                options.Configuration = configuration.GetConnectionString("Redis");
             });
             
             services.AddScoped<IEventStore, EventStore>();
