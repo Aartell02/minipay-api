@@ -8,12 +8,14 @@ namespace MiniPay.Application.Behaviours
     {
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
         {
+            var response = await next();
+
             if (request is ICacheInvalidation invalidationCommand)
             {
                 await cache.RemoveAsync(invalidationCommand.CacheKey, ct);
             }
 
-            return await next();
+            return response;
         }
     }
 }
