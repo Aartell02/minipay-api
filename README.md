@@ -13,7 +13,6 @@ Payment processing API built with **Domain-Driven Design**, **Event Sourcing**, 
 | Entity Framework Core | Event Store (SQL Server) |
 | Redis | Distributed Cache |
 | xUnit | Unit Tests |
-| DDD | Aggregates, Domain Events, Value Objects |
 
 ---
 
