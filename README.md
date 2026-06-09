@@ -1,67 +1,97 @@
-# \# MiniPay API
+# MiniPay API
 
-# 
+Payment processing API built with **Event Sourcing**, **CQRS** and **Clean Architecture**.
 
-# Payment processing API built with Event Sourcing, CQRS and Clean Architecture.
+---
 
-# 
+## Tech Stack
 
-# \## Tech Stack
+| | |
+|---|---|
+| ASP.NET Core 8 | REST API |
+| MediatR | CQRS + Pipeline Behaviors |
+| Entity Framework Core | Event Store (SQL Server) |
+| Redis | Distributed Cache |
+| xUnit | Unit Tests |
 
-# \- \*\*ASP.NET Core 8\*\* — REST API
+---
 
-# \- \*\*MediatR\*\* — CQRS + Pipeline Behaviors
+## Architecture
 
-# \- \*\*Entity Framework Core\*\* — Event Store (SQL Server)
+```
+MiniPay.Domain          → Aggregates, Events, Enums
+MiniPay.Application     → Commands, Queries, Handlers, Behaviours, Interfaces
+MiniPay.Infrastructure  → EventStore, CacheService, EF Core
+MiniPay.API             → Controllers, Program.cs
+```
 
-# \- \*\*Redis\*\* — Distributed Cache
+### How it works
 
-# \- \*\*Event Sourcing\*\* — Transaction state rebuilt from events
+Every transaction change is stored as an immutable event in SQL Server. The current state is rebuilt by replaying events (`Rewind`). Redis caches query results to avoid replaying on every read — cache is invalidated on every write command.
 
-# 
+```
+Request → Controller → MediatR
+            → CachingBehaviour   (Redis read)
+              → Handler
+                → EventStore     (SQL Server)
+            → CacheInvalidationBehaviour (Redis invalidate)
+```
 
-# \## Architecture
-# MiniPay.Domain → Aggregates, Events, Enums
-# ===
+### Transaction Flow
 
-# MiniPay.Application → Commands, Queries, Handlers, Behaviours
+```
+Initiated → Authorized → Settled
+```
 
-# MiniPay.Infrastructure → EventStore, CacheService, EF Core
-
-# MiniPay.API → Controllers, Program.cs
+---
 
 ## Getting Started
 
-# ===
+### Prerequisites
 
-# \### Prerequisites
+- [.NET 8 SDK](https://dotnet.microsoft.com/download)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
-# \- \[.NET 8 SDK](https://dotnet.microsoft.com/download)
+### Run
 
-# \- \[Docker Desktop](https://www.docker.com/products/docker-desktop/)
+**1. Start infrastructure**
+```bash
+docker compose up -d
+```
 
-# \### Run
+**2. Apply migrations**
+```bash
+dotnet ef database update --project MiniPay.Infrastructure --startup-project MiniPay.API
+```
 
-# 1\. Start infrastructure:
+**3. Run the API**
+```bash
+dotnet run --project MiniPay.API
+```
 
-# ```bash
+**4. Open Swagger**
 
-# docker compose up -d
+```
+https://localhost:7149/swagger
+```
 
+---
 
+## API Endpoints
 
-# 2. Apply migrations:
-# ===
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/transactions/initiate` | Create a new transaction |
+| `POST` | `/api/transactions/{id}/authorize` | Authorize a transaction |
+| `POST` | `/api/transactions/{id}/settle` | Settle an authorized transaction |
+| `GET` | `/api/transactions/{id}` | Get transaction by ID |
 
-# dotnet ef database update --project MiniPay.Infrastructure
+### Example
 
-
-
-# 3\. Run the API:
-
-# dotnet run --project MiniPay.API
-
-
-
-# 4.Open Swagger: https://localhost:7149/swagger
-
+```json
+POST /api/transactions/initiate
+{
+  "amount": 100.00,
+  "currency": "PLN"
+}
+```
