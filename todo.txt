@@ -1,0 +1,19 @@
+Walidacja - amount - minimalna wartość | Currency - słownik
+
+	EventEntity.cs, EventStore.cs	Literówka OccuredAt → OccurredAt
+ 
+Test dla rewind
+
+Implementacja cache - Redis
+
+Implementacja kolejki - Kafka
+
+benchmark 
+
+HTTP Request
+  → Controller
+    → MediatR
+      → CachingBehavior (Redis)
+        → Handler
+          → EventStore (SQL)
+          → EventBus.Publish(TransactionInitiated) → Kafka
